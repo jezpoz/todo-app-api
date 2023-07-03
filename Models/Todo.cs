@@ -17,21 +17,7 @@ namespace Todo.Models
         }
       }
     }
-    public string Title
-    {
-      get { return Title; }
-      set
-      {
-        if (string.IsNullOrEmpty(value))
-        {
-          Title = "";
-        }
-        else
-        {
-          Title = value;
-        }
-      }
-    }
+    public string Title { get; set; }
 
     public bool Done { get; set; }
 
