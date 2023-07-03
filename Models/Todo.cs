@@ -24,7 +24,7 @@ namespace Todo.Models
       {
         if (string.IsNullOrEmpty(value))
         {
-          value = "";
+          Title = "";
         }
         else
         {
