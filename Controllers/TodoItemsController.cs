@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Todo.Models;
+using Todo.Services;
 
 namespace Todo.Controllers
 {
@@ -13,42 +8,36 @@ namespace Todo.Controllers
   [ApiController]
   public class TodoItemsController : ControllerBase
   {
-    private readonly TodoContext _context;
+    private readonly TodoService _todoService;
 
-    public TodoItemsController(TodoContext context)
+    public TodoItemsController(TodoService todoService)
     {
-      _context = context;
+      _todoService = todoService;
     }
 
     // GET: api/TodoItems
     [HttpGet]
     public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodos()
     {
-      if (_context.Todos == null)
-      {
-        return NotFound();
-      }
-      return await _context.Todos.ToListAsync();
+      var todos = await _todoService.GetAllTodos();
+      return todos.ToList();
     }
 
     // GET: api/TodoItems/5
     [HttpGet("{id}")]
-    public async Task<ActionResult<TodoItem>> GetTodoItem(long id)
+    public async Task<ActionResult<TodoItem>> GetTodoItem(string id)
     {
-      if (_context.Todos == null)
-      {
-        return NotFound();
+      if (string.IsNullOrEmpty(id)) {
+        return BadRequest();
       }
-      var todoItem = await _context.Todos.FindAsync(id);
-
-      if (todoItem == null)
-      {
-        return NotFound();
+      var todo = await _todoService.GetTodoById(id);
+      if (todo != null) {
+        return todo;
       }
 
-      return todoItem;
+      return NotFound();
     }
-
+     /*
     // PUT: api/TodoItems/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id}")]
@@ -114,6 +103,6 @@ namespace Todo.Controllers
     private bool TodoItemExists(long id)
     {
       return (_context.Todos?.Any(e => e.Id == id)).GetValueOrDefault();
-    }
+    }*/
   }
 }

@@ -1,12 +1,12 @@
-using Microsoft.EntityFrameworkCore;
-using Todo.Models;
+using Todo.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddScoped<TodoService, TodoService>();
+builder.Services.AddScoped<CosmosService, CosmosService>();
 
 builder.Services.AddControllers();
-builder.Services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
